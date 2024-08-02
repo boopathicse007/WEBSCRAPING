@@ -37,10 +37,10 @@ def get_book_details(isbn13):
             title = title_elements[1].text
         else:
             title = None
-            return None
+
     except:
         title = None
-        return None
+
 
     try:
         author = driver.find_element(By.CLASS_NAME, 'contributor-name').text
@@ -152,7 +152,6 @@ def process_isbns_for_core(isbn_list):
     for isbn in isbn_list:
         book_details = get_book_details(isbn)
         if book_details and book_details['title_name'] and book_details['title_name']!="" and len(book_details['title_name'])>0:
-            print(book_details)
             books_list.append(book_details)
     driver.quit()
     return books_list
