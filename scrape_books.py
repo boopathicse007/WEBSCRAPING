@@ -200,4 +200,5 @@ print(f"End time: {time.strftime('%H:%M:%S', time.localtime(end_time))}")
 elapsed_time = end_time - start_time
 minutes, seconds = divmod(elapsed_time, 60)
 
+
 print(f"Elapsed time: {int(minutes)} minutes and {seconds:.2f} seconds")
