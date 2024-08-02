@@ -37,8 +37,10 @@ def get_book_details(isbn13):
             title = title_elements[1].text
         else:
             title = None
+            return None
     except:
         title = None
+        return None
 
     try:
         author = driver.find_element(By.CLASS_NAME, 'contributor-name').text
@@ -149,7 +151,8 @@ def process_isbns_for_core(isbn_list):
     driver = init_driver()
     for isbn in isbn_list:
         book_details = get_book_details(isbn)
-        if book_details:
+        if book_details and book_details['title_name'] and book_details['title_name']!="" and len(book_details['title_name'])>0:
+            print(book_details)
             books_list.append(book_details)
     driver.quit()
     return books_list
@@ -183,12 +186,12 @@ books_list = process_isbn_list(isbn_list)
 books_list = [book for book in books_list if book]
 df = pd.DataFrame(books_list)
 
-# Filter out rows where title_name is empty
-df = df[df['title_name'].notna() & (df['title_name'] != '')]
 
-# Reindex the final DataFrame to match the order of the original ISBN list
+
 df.set_index('isbn13', inplace=True)
 df = df.reindex(isbn_list).reset_index()
+
+df = df[df['title_name'].notna() & df['title_name'].str.strip().astype(bool)]
 
 df.to_csv('book_result_data.csv', index=False)
 
